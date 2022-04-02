@@ -1,0 +1,98 @@
+# Fatema Alhajeri
+# Monte Carlo simulation
+# estimating pi
+
+import matplotlib  # matplotlib is a library used to create static, animated, and interactive visualizations
+matplotlib.use("TkAgg")  # to be able to move the plot window in screen
+import matplotlib.pyplot as plt # to import plots from matplotlib.pyplot
+from matplotlib.pyplot import *
+fig = figure(figsize=(10, 10), dpi=80)  # size of the figure, dpi is dots per inches
+
+n = int(400)  # number of points
+r = 1  # the radius of the circle
+
+# Counter for the points inside the circle
+nInside = 0
+# Counter for the total number of points
+total = 0
+# to create a square with sides = 2 units
+# generate n number of random points between -1 to 1 for X and Y
+# in this case we need 2 dimensions ( X and Y)
+X = np.random.default_rng().uniform(-1, 1, n)
+Y = np.random.default_rng().uniform(-1, 1, n)
+
+# First matplotlib figure window
+fig1 = plt.figure(1)
+
+plt.xlim(-1.5, 1.5) # for the axes to be drawn from -1.5 to 1.5 for x and y
+plt.ylim(-1.5, 1.5)
+plt.legend()
+
+fig1.suptitle('Estimation of pi')  # to put a title for the figure and axes
+plt.xlabel('x')
+plt.ylabel('y')
+
+# arrays to plot the points
+insideX = []
+outsideX = []
+insideY = []
+outsideY = []
+
+# start Monte Carlo method
+for i in range(n):  # to determine bow many points are within a radius of 1(inside the circle) and their values
+    x = X[i]
+    y = Y[i]
+    if x ** 2 + y ** 2 <= r ** 2:  # store values of x and y within the circle
+        insideX.append(x)
+        insideY.append(y)
+
+        nInside = nInside + 1  # add 1 to the counter of points inside the circle
+        total = n - nInside
+
+
+    else:  # store the values of x and y of points outside the circle
+        outsideX.append(x)
+        outsideY.append(y)
+    # append() method in python adds a single item to the existing list.to store the values of x and y in this case.
+    # After executing the method append on the list the size of the list increases by one
+
+# plot the points on figure window
+plt.scatter(insideX, insideY, c='green', s=50, label=' Inside circle')
+plt.legend(loc=(0.75, 0.9))
+plt.scatter(outsideX, outsideY, c='orange', s=50, label=' outside circle')
+# the above will cause the legend to duplicate, to avoid that we use this code:
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.legend(by_label.values(), by_label.keys())
+
+# to add comments on top of the plot:
+total = n - nInside
+pi = 4 * nInside / n
+plt.title('total number of points = ' + str(n) + ' , outside the circle =' + str(total) + ' ;  inside the circle = ' + str( nInside) + r';         π =4(inside circle/total)= ' + str(np.round(pi, 6)))
+
+
+nOutside = n - nInside
+ratio = nInside / n
+
+
+
+print("The estimated value of pi =", pi)
+print("Total number of points =", n)
+print("Number of points within the circle =", nInside)
+print("Number of points outside the circle =", nOutside)
+print("Ratio of points within the circle =", ratio)
+print("      x                    y        ")
+# A "for" loop sets the iterator variable to each value in a provided list, array, or string
+# and repeats the code in the body of the for loop for each value of the iterator variable.
+# when the values in the array are sequential, we can use "range()"
+for i in range(n):
+    x = X[i]
+    y = Y[i]
+    print(x, "   ,   ", y)  # prints: the values of x and y for all the points
+
+for i in range(n):
+    x = X[i]
+    y = Y[i]
+    print("x^2 + y^2 =", x ** 2 + y ** 2)  # prints: the value of r^2
+
+plt.show()
